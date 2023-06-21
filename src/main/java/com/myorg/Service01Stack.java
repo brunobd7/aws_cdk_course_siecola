@@ -1,8 +1,10 @@
 package com.myorg;
 
+import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
+import software.amazon.awscdk.services.applicationautoscaling.EnableScalingProps;
 import software.amazon.awscdk.services.ec2.Vpc;
 import software.amazon.awscdk.services.ecs.*;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
@@ -52,5 +54,18 @@ public class Service01Stack extends Stack {
                         .healthyHttpCodes("200")
                         .build()
         );
+
+        /*  SET ON AUTOSCALING RELATED AT THIS SERVICE, SETUP A MINIMAL AND MAX RUNNING INSTANCES GENERATE BY AUTOSCALING*/
+        ScalableTaskCount scalableTaskCount = service01.getService().autoScaleTaskCount(EnableScalingProps.builder()
+                .minCapacity(2)
+                .maxCapacity(4)
+                .build());
+
+        //SET A CPU RESOURCE TARGET UTILIZATION AS A TRIGGER TO SCALE UP AND DOWN. DEFINED TIME TO WATCH AS ULTILIZATION BEFORE SCALING.
+        scalableTaskCount.scaleOnCpuUtilization("Service01AutoScaling", CpuUtilizationScalingProps.builder()
+                .targetUtilizationPercent(50)
+                .scaleInCooldown(Duration.seconds(60))
+                .scaleOutCooldown(Duration.seconds(60))
+                .build());
     }
 }
