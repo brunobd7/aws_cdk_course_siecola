@@ -11,6 +11,9 @@ public class AwsCdkCourseSiecolaApp {
         ClusterStack clusterStack = new ClusterStack(app, "Cluster", vpcStack.getVpc());
         clusterStack.addDependency(vpcStack); /* ADDING DEPENDENCY, BECAUSE OUR CLUSTER REQUIRE A VPC READY TO USE TO BE CREATED INSIDE */
 
+        Service01Stack service01Stack = new Service01Stack(app, "Service01",clusterStack.getCluster());
+        service01Stack.addDependency(clusterStack); /* ADDING DEPENDENCY, BECAUSE OUR SERVICE REQUIRE A CLUSTER READY TO USE TO BE CREATED INSIDE */
+
         app.synth();
     }
 }
