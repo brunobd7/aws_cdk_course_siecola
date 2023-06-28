@@ -33,7 +33,7 @@ public class Service01Stack extends Stack {
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder() // CREATING A TASK TO SPECIFIED HOW OUR SERVICE WILL BE EXECUTE
                         .containerName("aws_project01")//APPLICATION CONTAINER NAME
                         .containerPort(8080)//APPLICATION CONTAINER PORT
-                        .image(ContainerImage.fromRegistry("siecola/curso_aws_project01:1.7.0"))//DOCKER IMAGE FROM REPO (DOCKER_HUB)
+                        .image(ContainerImage.fromRegistry("brunobd7/generic-project-to-aws-01:1.0.0"))//DOCKER IMAGE FROM REPO (DOCKER_HUB)
                         .logDriver(LogDriver.awsLogs(AwsLogDriverProps.builder()
                                 .logGroup(LogGroup.Builder
                                         .create(this, "Service01LogGroup")
