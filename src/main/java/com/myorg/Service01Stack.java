@@ -29,11 +29,11 @@ public class Service01Stack extends Stack {
                 .cpu(512)// vCPU
                 .memoryLimitMiB(1024)// vRAM
                 .desiredCount(2)//INSTANCES
-                .listenerPort(8080)// APPLICATION PORT
+                .listenerPort(8080)// APPLICATION PORT -> TO EXTERNAL ACCESS
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder() // CREATING A TASK TO SPECIFIED HOW OUR SERVICE WILL BE EXECUTE
                         .containerName("aws_project01")//APPLICATION CONTAINER NAME
                         .containerPort(8080)//APPLICATION CONTAINER PORT
-                        .image(ContainerImage.fromRegistry("brunobd7/generic-project-to-aws-01:1.0.0"))//DOCKER IMAGE FROM REPO (DOCKER_HUB)
+                        .image(ContainerImage.fromRegistry("siecola/curso_aws_project01:1.7.0"))//DOCKER IMAGE FROM REPO (DOCKER_HUB)
                         .logDriver(LogDriver.awsLogs(AwsLogDriverProps.builder()
                                 .logGroup(LogGroup.Builder
                                         .create(this, "Service01LogGroup")
@@ -44,6 +44,7 @@ public class Service01Stack extends Stack {
                                 .build()))//CONFIGURING LOGS WITH AWS CLOUDWATCH
                         .build())
                 .publicLoadBalancer(true)// SET THIS LOADBALANCER AS PUBLIC
+                .assignPublicIp(true)// [OPTIONAL] USE THIS PARAM ONLY IN NO PRODUCTIVE ENVIRONMENT,OPTIONAL TAG CONFIGURATIONS AT THIS PROJECT ARE A GROUP OF CONFIG TO TRY REDUCE AWS COST
                 .build();
 
         //CONFIGURING A HEALTHCHECK USING SPRING ACTUATOR PATH REFERENCE ON OUR APPLICATION
@@ -67,5 +68,11 @@ public class Service01Stack extends Stack {
                 .scaleInCooldown(Duration.seconds(60))
                 .scaleOutCooldown(Duration.seconds(60))
                 .build());
+        // ABOVE HOW TO SET AUTOSCALE USING VMEMORY AS A PARAMETER
+//        scalableTaskCount.scaleOnMemoryUtilization("Service01AutoScalingMemory", MemoryUtilizationScalingProps.builder()
+//                .targetUtilizationPercent(70)
+//                .scaleInCooldown(Duration.seconds(60))
+//                .scaleOutCooldown(Duration.seconds(60))
+//                .build());
     }
 }
