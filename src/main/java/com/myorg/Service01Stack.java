@@ -23,7 +23,7 @@ public class Service01Stack extends Stack {
 
 
         ApplicationLoadBalancedFargateService service01 = ApplicationLoadBalancedFargateService.Builder
-                .create(this, "ALB-01")// CREATING A APPLICATION LOAD BALANCE
+                .create(this, "ALB01")// CREATING A APPLICATION LOAD BALANCE
                 .serviceName("service-01") // CREATING A SERVICE
                 .cluster(cluster)
                 .cpu(512)// vCPU
@@ -40,11 +40,10 @@ public class Service01Stack extends Stack {
                                         .logGroupName("Service01")
                                         .removalPolicy(RemovalPolicy.DESTROY)//RULE TO PERSIST OR DESTROY LOGS
                                         .build())
-                                        .streamPrefix("Service01LogPrefix")
+                                        .streamPrefix("Service01")
                                 .build()))//CONFIGURING LOGS WITH AWS CLOUDWATCH
                         .build())
                 .publicLoadBalancer(true)// SET THIS LOADBALANCER AS PUBLIC
-                .assignPublicIp(true)// [OPTIONAL] USE THIS PARAM ONLY IN NO PRODUCTIVE ENVIRONMENT,OPTIONAL TAG CONFIGURATIONS AT THIS PROJECT ARE A GROUP OF CONFIG TO TRY REDUCE AWS COST
                 .build();
 
         //CONFIGURING A HEALTHCHECK USING SPRING ACTUATOR PATH REFERENCE ON OUR APPLICATION
@@ -68,6 +67,7 @@ public class Service01Stack extends Stack {
                 .scaleInCooldown(Duration.seconds(60))
                 .scaleOutCooldown(Duration.seconds(60))
                 .build());
+
         // ABOVE HOW TO SET AUTOSCALE USING VMEMORY AS A PARAMETER
 //        scalableTaskCount.scaleOnMemoryUtilization("Service01AutoScalingMemory", MemoryUtilizationScalingProps.builder()
 //                .targetUtilizationPercent(70)

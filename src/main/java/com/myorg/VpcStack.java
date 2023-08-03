@@ -18,7 +18,6 @@ public class VpcStack extends Stack {
 
         Vpc.Builder.create(this, "Vpc01")
                 .maxAzs(3)
-                .natGateways(0)// [OPTIONAL] IMPORTANT USE ONLY OF STUDY, NO REPLY THIS ON PRODUCTION.OTHER CONFIG WIHT THIS CAN MAKE INSTANCES EXPOSED ON INTERNET.
                 .build();
     }
 
